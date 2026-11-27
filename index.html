@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>30天新約希臘文高頻字彙學習計畫 | Koine Greek 30</title>
+    <!-- 引入 Google Fonts 以確保希臘文與繁體中文顯示優美 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gentium+Plus:ital,wght@0,400;0,700;1,400&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2C3E50;      /* 深海軍藍：沉穩、學術 */
+            --secondary: #8E6E53;    /* 羊皮紙棕：古典、溫暖 */
+            --accent: #C0392B;       /* 強調紅 */
+            --success: #27AE60;      /* 完成綠 */
+            --bg-light: #F9F7F2;     /* 象牙白背景 */
+            --card-bg: #FFFFFF;
+            --text-main: #2C3E50;
+            --text-muted: #7F8C8D;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        .greek-text {
+            font-family: 'Gentium Plus', serif;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, var(--primary), #1A252F);
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            max-width: 900px;
+            margin: 1.5rem auto 0;
+            background: rgba(255,255,255,0.2);
+            border-radius: 20px;
+            height: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background-color: var(--success);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* View Switching */
+        .view-section {
+            display: none;
+        }
+        .view-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 30-Day Grid */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 1rem;
+        }
+
+        .day-card {
+            background: var(--card-bg);
+            border: 2px solid #E5E0D8;
+            border-radius: 12px;
+            padding: 1.2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .day-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--secondary);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        .day-card.completed {
+            border-color: var(--success);
+            background-color: #F0FFF4;
+        }
+
+        .day-card.completed::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            right: 10px;
+            background: var(--success);
+            color: white;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .day-number {
+            font-size: 0.85rem;
+            color: var(--secondary);
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .day-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-top: 0.4rem;
+        }
+
+        .day-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        /* Lesson View */
+        .lesson-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: background 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1A252F;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-success:hover {
+            background: #219150;
+        }
+
+        /* Flashcard */
+        .flashcard-area {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            perspective: 1000px;
+        }
+
+        .flashcard {
+            width: 100%;
+            min-height: 320px;
+            position: relative;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+            cursor: pointer;
+        }
+
+        .flashcard.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            background: var(--card-bg);
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border: 1px solid #E5E0D8;
+        }
+
+        .card-back {
+            transform: rotateY(180deg);
+            background: #FFFDF9;
+        }
+
+        .greek-word {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .transliteration {
+            font-size: 1.1rem;
+            color: var(--secondary);
+            font-style: italic;
+            margin-bottom: 1rem;
+        }
+
+        .audio-btn {
+            background: #F0ECE3;
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            margin-top: 0.5rem;
+        }
+
+        .audio-btn:hover {
+            background: var(--secondary);
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .hint-text {
+            position: absolute;
+            bottom: 15px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .meaning {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .pos-freq {
+            font-size: 0.9rem;
+            background: #EEECE6;
+            padding: 0.2rem 0.8rem;
+            border-radius: 12px;
+            margin-bottom: 1.2rem;
+            color: var(--primary);
+        }
+
+        .verse-box {
+            background: #F4F1EA;
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--secondary);
+            width: 100%;
+            text-align: left;
+            font-size: 0.95rem;
+        }
+
+        .verse-greek {
+            font-size: 1.15rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        /* Card Navigation */
+        .card-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Quiz Section */
+        .quiz-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            display: none;
+        }
+
+        .quiz-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 1rem;
+            margin: 0.8rem 0;
+            border: 2px solid #E5E0D8;
+            border-radius: 10px;
+            background: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quiz-option:hover:not(:disabled) {
+            border-color: var(--secondary);
+            background: #FAF8F5;
+        }
+
+        .quiz-option.correct {
+            border-color: var(--success);
+            background: #D4EDDA;
+            color: #155724;
+            font-weight: bold;
+        }
+
+        .quiz-option.wrong {
+            border-color: var(--accent);
+            background: #F8D7DA;
+            color: #721C24;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 3rem;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>📖 30天新約聖經希臘文高頻字彙</h1>
+    <p>每日10分鐘，掌握新約聖經出現次數最多的核心原文，更深體會神的話語</p>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+        <div class="progress-text" id="progressText">已完成 0 / 30 天 (0%)</div>
+    </div>
+</header>
+
+<div class="container">
+    <!-- 首頁：30天課程表 -->
+    <section id="dashboardView" class="view-section active">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2>選擇學習天數</h2>
+            <button class="btn btn-outline" onclick="resetProgress()" style="font-size: 0.8rem; padding: 0.4rem 0.8rem;">重置進度</button>
+        </div>
+        <div class="days-grid" id="daysGrid">
+            <!-- 由 JavaScript 動態生成 30 天卡片 -->
+        </div>
+    </section>
+
+    <!-- 學習頁：字卡與測驗 -->
+    <section id="lessonView" class="view-section">
+        <div class="lesson-header">
+            <button class="btn btn-outline" onclick="showDashboard()">← 返回30天總覽</button>
+            <h2 id="lessonTitle">Day 1: 課程標題</h2>
+            <button class="btn btn-primary" id="startQuizBtn" onclick="startQuiz()">開始今日測驗 →</button>
+        </div>
+
+        <!-- 字卡學習區 -->
+        <div id="studyArea">
+            <div class="flashcard-area">
+                <div class="flashcard" id="flashcard" onclick="flipCard()">
+                    <!-- 正面 -->
+                    <div class="card-face card-front">
+                        <div class="greek-word greek-text" id="cardGreek">λόγος</div>
+                        <div class="transliteration" id="cardTranslit">logos</div>
+                        <button class="audio-btn" onclick="speakGreek(event)" title="聆聽發音">🔊</button>
+                        <div class="hint-text">點擊卡片翻面查看釋義與經文</div>
+                    </div>
+                    <!-- 背面 -->
+                    <div class="card-face card-back">
+                        <div class="meaning" id="cardMeaning">道、話語、信息</div>
+                        <div class="pos-freq" id="cardMeta">名詞 (陽性) • 新約出現 330 次</div>
+                        <div class="verse-box">
+                            <div class="verse-greek greek-text" id="cardVerseGreek">Ἐν ἀρχῇ ἦν ὁ λόγος</div>
+                            <div id="cardVerseCh">太初有道（約翰福音 1:1）</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-controls">
+                <button class="btn btn-outline" id="prevCardBtn" onclick="prevCard()">← 上一個字</button>
+                <span id="cardCounter" style="font-weight: bold;">1 / 5</span>
+                <button class="btn btn-outline" id="nextCardBtn" onclick="nextCard()">下一個字 →</button>
+            </div>
+        </div>
+
+        <!-- 測驗區 -->
+        <div class="quiz-container" id="quizArea">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                <span style="font-weight: bold; color: var(--secondary);" id="quizProgress">問題 1 / 5</span>
+                <button class="btn btn-outline" onclick="backToStudy()" style="padding: 0.2rem 0.6rem; font-size: 0.85rem;">返回字卡</button>
+            </div>
+            <h3 style="margin-bottom: 1rem;">請選出以下希臘文的正確中文意思：</h3>
+            <div style="text-align: center; margin: 1.5rem 0;">
+                <span class="greek-word greek-text" id="quizQuestionWord" style="font-size: 2.8rem;"></span>
+                <button class="audio-btn" onclick="speakQuizWord()" style="vertical-align: middle; margin-left: 10px;">🔊</button>
+            </div>
+            <div id="quizOptions"></div>
+            <div id="quizFeedback" style="margin-top: 1.5rem; text-align: center; display: none;">
+                <p id="quizResultText" style="font-size: 1.1rem; font-weight: bold; margin-bottom: 1rem;"></p>
+                <button class="btn btn-success" id="completeDayBtn" onclick="completeCurrentDay()">完成今日學習並記錄 ✓</button>
+            </div>
+        </div>
+    </section>
+</div>
+
+<footer>
+    <p>「你的話是我腳前的燈，是我路上的光。」— 詩篇 119:105</p>
+    <p style="margin-top: 0.5rem;">建議使用 Chrome 或 Edge 瀏覽器以獲得最佳希臘文語音發音體驗。</p>
+</footer>
+
+<script>
+    // ==========================================
+    // 30天新約希臘文核心課程資料庫
+    // 前7天包含完整精選高頻字彙，第8-30天包含核心神學字彙並可依格式自由擴充
+    // ==========================================
+    const curriculum = [
+        {
+            day: 1,
+            title: "神與道 (基礎神學核心)",
+            subtitle: "出現頻率最高的核心名詞",
+            words: [
+                { greek: "θεός", translit: "theos", meaning: "神、上帝", meta: "名詞 • 出現 1,317 次", verseG: "θεὸς ἀγάπη ἐστίν.", verseC: "神就是愛。（約翰一書 4:8）" },
+                { greek: "λόγος", translit: "logos", meaning: "道、話語、信息", meta: "名詞 • 出現 330 次", verseG: "Ἐν ἀρχῇ ἦν ὁ λόγος", verseC: "太初有道（約翰福音 1:1）" },
+                { greek: "κύριος", translit: "kyrios", meaning: "主、主人、先生", meta: "名詞 • 出現 717 次", verseG: "Κύριος Ἰησοῦς Χριστός", verseC: "主耶穌基督（腓立比書 2:11）" },
+                { greek: "Ἰησοῦς", translit: "Iēsous", meaning: "耶穌（救主之意）", meta: "專有名詞 • 出現 917 次", verseG: "καλέσεις τὸ ὄνομα αὐτοῦ Ἰησοῦν", verseC: "你要給他起名叫耶穌（馬太福音 1:21）" },
+                { greek: "Χριστός", translit: "Christos", meaning: "基督、受膏者、彌賽亞", meta: "名詞/頭銜 • 出現 529 次", verseG: "Σὺ εἶ ὁ Χριστός", verseC: "你是基督（馬可福音 8:29）" }
+            ]
+        },
+        {
+            day: 2,
+            title: "愛、恩典與平安",
+            subtitle: "福音書與保羅書信的祝福",
+            words: [
+                { greek: "ἀγάπη", translit: "agapē", meaning: "聖愛、無條件的愛", meta: "名詞 • 出現 116 次", verseG: "ἡ ἀγάπη μακροθυμεῖ", verseC: "愛是恆久忍耐（哥林多前書 13:4）" },
+                { greek: "χάρις", translit: "charis", meaning: "恩典、恩惠、感謝", meta: "名詞 • 出現 155 次", verseG: "Τῇ γὰρ χάριτί ἐστε σεσῳσμένοι", verseC: "你們得救是本乎恩（以弗所書 2:8）" },
+                { greek: "εἰρήνη", translit: "eirēnē", meaning: "平安、和平", meta: "名詞 • 出現 92 次", verseG: "Εἰρήνη ὑμῖν.", verseC: "願你們平安。（約翰福音 20:19）" },
+                { greek: "χαρά", translit: "chara", meaning: "喜樂、歡喜", meta: "名詞 • 出現 59 次", verseG: "Χαίρετε ἐν κυρίῳ πάντοτε", verseC: "你們要靠主常常喜樂（腓立比書 4:4）" },
+                { greek: "δόξα", translit: "doxa", meaning: "榮耀、尊榮", meta: "名詞 • 出現 166 次", verseG: "Δόξα ἐν ὑψίστοις θεῷ", verseC: "在至高之處榮耀歸與神（路加福音 2:14）" }
+            ]
+        },
+        {
+            day: 3,
+            title: "信心、盼望與真理",
+            subtitle: "基督徒生命的根基",
+            words: [
+                { greek: "πίστις", translit: "pistis", meaning: "信心、信仰、信實", meta: "名詞 • 出現 243 次", verseG: "Ἔστιν δὲ πίστις ἐλπιζομένων ὑπόστασις", verseC: "信就是所望之事的實底（希伯來書 11:1）" },
+                { greek: "ἐλπίς", translit: "elpis", meaning: "盼望、指望", meta: "名詞 • 出現 53 次", verseG: "νυνὶ δὲ μένει πίστις, ἐλπίς, ἀγάπη", verseC: "如今常存的有信，有望，有愛（哥林多前書 13:13）" },
+                { greek: "ἀλήθεια", translit: "alētheia", meaning: "真理、真實", meta: "名詞 • 出現 109 次", verseG: "Ἐγώ εἰμι ἡ ὁδὸς καὶ ἡ ἀλήθεια καὶ ἡ ζωή", verseC: "我就是道路、真理、生命（約翰福音 14:6）" },
+                { greek: "ζωή", translit: "zōē", meaning: "生命（常指永生）", meta: "名詞 • 出現 135 次", verseG: "καὶ ἡ ζωὴ ἦν τὸ φῶς τῶν ἀνθρώπων", verseC: "生命在祂裡頭，這生命就是人的光（約翰福音 1:4）" },
+                { greek: "φῶς", translit: "phōs", meaning: "光、光明", meta: "名詞 • 出現 73 次", verseG: "Ἐγώ εἰμι τὸ φῶς τοῦ κόσμου", verseC: "我是世界的光（約翰福音 8:12）" }
+            ]
+        },
+        {
+            day: 4,
+            title: "聖靈、天國與教會",
+            subtitle: "神國度的群體與能力",
+            words: [
+                { greek: "πνεῦμα", translit: "pneuma", meaning: "靈、聖靈、風、氣息", meta: "名詞 • 出現 379 次", verseG: "Πνεῦμα ὁ θεός", verseC: "神是個靈（約翰福音 4:24）" },
+                { greek: "βασιλεία", translit: "basileia", meaning: "國度、王權", meta: "名詞 • 出現 162 次", verseG: "ἤγγικεν γὰρ ἡ βασιλεία τῶν οὐρανῶν", verseC: "天國近了（馬太福音 3:2）" },
+                { greek: "οὐρανός", translit: "ouranos", meaning: "天、天空、天堂", meta: "名詞 • 出現 273 次", verseG: "Πάτερ ἡμῶν ὁ ἐν τοῖς οὐρανοῖς", verseC: "我們在天上的父（馬太福音 6:9）" },
+                { greek: "ἐκκλησία", translit: "ekklēsia", meaning: "教會、會眾（原意：被召出來）", meta: "名詞 • 出現 114 次", verseG: "οἰκοδομήσω μου τὴν ἐκκλησίαν", verseC: "我要把我的教會建造在這磐石上（馬太福音 16:18）" },
+                { greek: "κόσμος", translit: "kosmos", meaning: "世界、世人、秩序", meta: "名詞 • 出現 186 次", verseG: "Οὕτως γὰρ ἠγάπησεν ὁ θεὸς τὸν κόσμον", verseC: "神愛世人（約翰福音 3:16）" }
+            ]
+        },
+        {
+            day: 5,
+            title: "人、罪與救恩",
+            subtitle: "福音的核心信息",
+            words: [
+                { greek: "ἄνθρωπος", translit: "anthrōpos", meaning: "人、人類", meta: "名詞 • 出現 550 次", verseG: "ὁ υἱὸς τοῦ ἀνθρώπου", verseC: "人子（馬可福音 10:45）" },
+                { greek: "ἁμαρτία", translit: "hamartia", meaning: "罪、過犯（原意：不中靶心）", meta: "名詞 • 出現 173 次", verseG: "πάντες γὰρ ἥμαρτον", verseC: "因為世人都犯了罪（羅馬書 3:23）" },
+                { greek: "σωτηρία", translit: "sōtēria", meaning: "救恩、拯救", meta: "名詞 • 出現 46 次", verseG: "ἡ σωτηρία ἐκ τῶν Ἰουδαίων ἐστίν", verseC: "救恩是從猶太人出來的（約翰福音 4:22）" },
+                { greek: "σταυρός", translit: "stauros", meaning: "十字架", meta: "名詞 • 出現 27 次", verseG: "ὁ λόγος γὰρ ὁ τοῦ σταυροῦ", verseC: "因為十字架的道理（哥林多前書 1:18）" },
+                { greek: "αἷμα", translit: "haima", meaning: "血、寶血", meta: "名詞 • 出現 97 次", verseG: "τὸ αἷμα Ἰησοῦ τοῦ υἱοῦ αὐτοῦ καθαρίζει ἡμᾶς", verseC: "祂兒子耶穌的血也洗淨我們一切的罪（約翰一書 1:7）" }
+            ]
+        },
+        {
+            day: 6,
+            title: "最常見的希臘文動詞 (上)",
+            subtitle: "閱讀經文必備的動作詞彙",
+            words: [
+                { greek: "λέγω", translit: "legō", meaning: "說、講、告訴", meta: "動詞 • 出現 2,354 次", verseG: "λέγει αὐτῷ ὁ Ἰησοῦς", verseC: "耶穌對他說（約翰福音 14:6）" },
+                { greek: "εἰμί", translit: "eimi", meaning: "是、存在（Ἐγώ εἰμι 我是）", meta: "動詞 • 出現 2,462 次"
